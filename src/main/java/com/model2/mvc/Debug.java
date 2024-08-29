@@ -3,10 +3,12 @@ package com.model2.mvc;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.model2.mvc.common.util.CommonUtil;
+
 public abstract class Debug {
 	
 	// Constructor
-	public Debug() {
+	private Debug() {
 	}
 	
 	
@@ -39,7 +41,7 @@ public abstract class Debug {
 	
 	public static void startDaoMethod (String methodName, String params) {
 		System.out.println(String.format("\n\t%s().%s(%s)\n", 
-										daoName, methodName, params));
+										daoName, methodName, CommonUtil.null2str(params)));
 	}
 	
 	public static void printSQL(String sql) {
@@ -110,6 +112,19 @@ public abstract class Debug {
 	
 	public static void endJsp() {
 		System.out.println(";");
+	}
+	
+	public static String str2date(String str) {
+		str = CommonUtil.null2str(str);
+		str = str.split(" ")[0];
+		
+		String dateStr = "";
+		
+		for (String s : str.split("-")) {
+			dateStr += s;
+		}
+		
+		return dateStr;
 	}
 	
 }

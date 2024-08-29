@@ -4,6 +4,7 @@ package com.model2.mvc.service.product.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -268,6 +269,112 @@ public class ProductDao extends AbstractDao {
 		
 		return product;
 	}
+	
+	
+	// 제일 최근에 추가된 상품내용 조회
+	public Product findProduct() {
+		
+		Debug.startDaoMethod("findProduct", null);
+		
+		Connection con = DBUtil.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		String sql = makeLastRowSQL("product", "prod_no");
+		
+		Product product = new Product();
+		
+		try {
+			Debug.printSQL(sql);
+			stmt = con.prepareStatement(sql);
+			
+			rs = stmt.executeQuery();
+			
+			rs.next();
+			product.setProdNo(rs.getInt(1));
+			product.setProdName(rs.getString(2));
+			product.setProdDetail(rs.getString(3));
+			product.setManuDate(rs.getString(4));
+			product.setPrice(rs.getInt(5));
+			product.setFileName(rs.getString(6));
+			product.setRegDate(rs.getDate(7));
+			product.setProTranCode(rs.getString(8));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			
+			try {
+				if (rs != null) rs.close();
+				if (stmt != null) stmt.close();
+				if (con != null) con.close();
+				
+			} catch (Exception e2) {
+				e2.printStackTrace();
+				
+			}
+			
+		}
+		
+		Debug.printDataT2("product", product);
+		Debug.endDaoMethod();
+		
+		return product;
+	}
+	
+	
+	// 상품등록
+	public void insertProduct(Product product) {
+		
+		Debug.startDaoMethod("insertProduct", "product");
+		Debug.printDataT2("product", product);
+		
+		Connection con = DBUtil.getConnection();
+		PreparedStatement stmt = null;
+		int rs = -1;
+		
+		String sql = "INSERT INTO product " + 
+					 "VALUES (seq_product_prod_no.NEXTVAL, " + 
+					 "?, ?, ?, ?, ?, SYSDATE, ?) ";
+		
+		try {
+			Debug.printSQL(sql);
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, product.getProdName());
+			stmt.setString(2, product.getProdDetail());
+			stmt.setString(3, product.getManuDate());
+			stmt.setInt(4, product.getPrice());
+			stmt.setString(5, product.getFileName());
+			stmt.setString(6, product.getProTranCode());
+			
+			rs = stmt.executeUpdate();
+			
+			Debug.printDataT2("rs", rs);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			
+			try {
+				if (stmt != null) stmt.close();
+				if (con != null) con.close();
+				
+			} catch	(Exception e2) {
+				e2.printStackTrace();
+				
+			}
+		}
+		
+		Debug.endDaoMethod();
+		
+	}
+	
+	
 
 }
 // class end

@@ -4,6 +4,7 @@ package com.model2.mvc.common.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Map;
 
 import com.model2.mvc.Debug;
@@ -99,6 +100,20 @@ public abstract class AbstractDao {
 		Debug.printDataT2("result", result);
 		
 		return result;
+	}
+	
+	public String makeLastRowSQL(String table, String pkColumn) {
+		
+		Debug.startDaoMethod("getLastRow", "table");
+		Debug.printDataT2("table", table);
+		Debug.printDataT2("pkColumn", pkColumn);
+		
+		String sql = "SELECT * FROM " + 
+					 	"(SELECT * FROM " + table + " " + 
+					 	"ORDER BY " + pkColumn + " DESC) " + 
+				 	 "WHERE ROWNUM = 1";
+		
+		return sql;
 	}
 
 }
