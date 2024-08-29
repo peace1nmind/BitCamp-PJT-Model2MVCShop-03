@@ -50,12 +50,14 @@ public abstract class Debug {
 		System.out.println("\t;");
 	}
 	
-	public static void printDataInDao(String dataName, Object data) {
+	// Dao에서 T2
+	public static void printDataT2(String dataName, Object data) {
 		System.out.println(String.format("\t\t%s= %s",
 										dataName, (data==null)? "null" : data.toString()));
 	}
 	
-	public static void printDataInAction(String dataName, Object data) {
+	// Action에선 T1
+	public static void printDataT1(String dataName, Object data) {
 		System.out.println(String.format("\t%s= %s",
 										dataName, data.toString()));
 	}
@@ -79,6 +81,15 @@ public abstract class Debug {
 	public static int getParamInt(HttpServletRequest request, String paramName) {
 		String paramValue = request.getParameter(paramName);
 		int intValue = (paramValue==null || paramValue.equals(""))? 0 : Integer.parseInt(paramValue);
+		System.out.println(String.format("\t%s= %d", 
+										paramName, intValue));
+		
+		return intValue;
+	}
+	
+	public static int getPage(HttpServletRequest request, String paramName) {
+		String paramValue = request.getParameter(paramName);
+		int intValue = (paramValue==null || paramValue.equals(""))? 1 : Integer.parseInt(paramValue);
 		System.out.println(String.format("\t%s= %d", 
 										paramName, intValue));
 		

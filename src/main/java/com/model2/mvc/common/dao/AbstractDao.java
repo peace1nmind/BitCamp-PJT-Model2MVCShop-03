@@ -4,10 +4,12 @@ package com.model2.mvc.common.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Map;
 
 import com.model2.mvc.Debug;
 import com.model2.mvc.common.Search;
 import com.model2.mvc.common.util.DBUtil;
+import com.model2.mvc.service.TranCodeMapper;
 
 public abstract class AbstractDao {
 
@@ -69,8 +71,8 @@ public abstract class AbstractDao {
 	public String makeCurrentPageSql(String sql , Search search){
 		
 		Debug.startDaoMethod("makeCurrentPageSql", "sql, search");
-		Debug.printDataInDao("sql", sql);
-		Debug.printDataInDao("search", search);
+		Debug.printDataT2("sql", sql);
+		Debug.printDataT2("search", search);
 		
 		sql = 	"SELECT * "+ 
 				"FROM (	SELECT inner_table.* , ROWNUM AS row_seq " +
@@ -83,6 +85,20 @@ public abstract class AbstractDao {
 		Debug.endDaoMethod();
 		
 		return sql;
+	}
+	
+	public boolean checkTranCode(String tranCode) {
+		
+		tranCode = tranCode.trim();
+		Debug.startDaoMethod("checkTranCode", "tranCode");
+		Debug.printDataT2("tranCode", tranCode);
+		
+		Map<String, String> tranCodeMap = TranCodeMapper.getInstance().getMap();
+		
+		boolean result = tranCodeMap.containsKey(tranCode);
+		Debug.printDataT2("result", result);
+		
+		return result;
 	}
 
 }

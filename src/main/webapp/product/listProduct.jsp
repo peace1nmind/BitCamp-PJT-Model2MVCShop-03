@@ -71,13 +71,13 @@
 						<td align="right">
 							<select name="searchCondition" class="ct_input_g" style="width:80px">
 								
-								<option value="0" ${(search.searchCondition=='0')? "selected":"" }>
+								<option value="0" ${(!empty search.searchCondition && search.searchCondition=='0')? "selected":"" }>
 									상품번호
 								</option>
-								<option value="1" ${(search.searchCondition=='1')? "selected":"" }>
+								<option value="1" ${(!empty search.searchCondition && search.searchCondition=='1')? "selected":"" }>
 									상품명
 								</option>
-								<option value="2" ${(search.searchCondition=='2')? "selected":"" }>
+								<option value="2" ${(!empty search.searchCondition && search.searchCondition=='2')? "selected":"" }>
 									상품가격
 								</option>
 								

@@ -3,6 +3,8 @@ package com.model2.mvc.common;
 
 import javax.servlet.ServletContext;
 
+import com.model2.mvc.Debug;
+
 public class Paging {
 
 	// Field
@@ -25,6 +27,9 @@ public class Paging {
 		
 		pageUnit = Integer.parseInt(servletContext.getInitParameter("pageUnit"));
 		pageSize = Integer.parseInt(servletContext.getInitParameter("pageSize"));
+		
+		Debug.printDataT1("pageSize", pageSize);
+		Debug.printDataT1("pageUnit", pageUnit);
 	}
 
 	
@@ -36,10 +41,10 @@ public class Paging {
 		System.out.println("\ttotal= "+total);
 		this.total = total;
 		System.out.println("\tcurrentPage= "+currentPage);
-		this.currentPage = currentPage;
+		this.currentPage = (currentPage==0)? 1 : currentPage;
 		
 		if (total > 0) {
-			totalPage = (int) Math.ceil(total*1.0 / pageUnit); 
+			totalPage = (int) Math.ceil(total*1.0 / pageSize); 
 		}
 		System.out.println("\ttotalPage= "+totalPage);
 		

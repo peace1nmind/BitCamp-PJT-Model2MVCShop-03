@@ -30,7 +30,7 @@ public class ProductDao extends AbstractDao {
 	public Map<String, Object> getProductList(Search search) {
 		
 		Debug.startDaoMethod("getProductList", "search");
-		Debug.printDataInDao("search", search);
+		Debug.printDataT2("search", search);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -42,9 +42,9 @@ public class ProductDao extends AbstractDao {
 					+"FROM product ";
 		
 		String searchCondition = search.getSearchCondition();
-		Debug.printDataInDao("searchCondition", searchCondition);
+		Debug.printDataT2("searchCondition", searchCondition);
 		String searchKeyword = search.getSearchKeyword();
-		Debug.printDataInDao("searchKeyword", searchKeyword);
+		Debug.printDataT2("searchKeyword", searchKeyword);
 		String condition = "prod_no";
 		
 		if (!CommonUtil.null2str(searchKeyword).equals("")) {
@@ -67,10 +67,10 @@ public class ProductDao extends AbstractDao {
 			}
 		}
 		
-		sql += "ORDER BY reg_date DESC NULLS LAST";
+		sql += "ORDER BY reg_date DESC NULLS LAST, prod_no ";
 		
 		int total = getTotalCount(sql);
-		Debug.printDataInDao("total", total);
+		Debug.printDataT2("total", total);
 		map.put("count", total);
 		
 		try {
@@ -99,7 +99,20 @@ public class ProductDao extends AbstractDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			
+		} finally {
+			
+			try {
+				if (rs != null) rs.close();
+				if (stmt != null) stmt.close();
+				if (con != null) con.close();
+				
+			} catch (Exception e2) {
+				e2.printStackTrace();
+				
+			}
 		}
+		
+		Debug.endDaoMethod();
 		
 		return map;
 	}
@@ -110,7 +123,7 @@ public class ProductDao extends AbstractDao {
 	public Map<String, Object> getProductList(Search search, String tranCode, boolean over) {
 		
 		Debug.startDaoMethod("getProductList", "search");
-		Debug.printDataInDao("search", search);
+		Debug.printDataT2("search", search);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -124,9 +137,9 @@ public class ProductDao extends AbstractDao {
 		sql += "WHERE pro_tran_code "+((over)? ">=" : "<=")+"'"+tranCode+"'" ;
 		
 		String searchCondition = search.getSearchCondition();
-		Debug.printDataInDao("searchCondition", searchCondition);
+		Debug.printDataT2("searchCondition", searchCondition);
 		String searchKeyword = search.getSearchKeyword();
-		Debug.printDataInDao("searchKeyword", searchKeyword);
+		Debug.printDataT2("searchKeyword", searchKeyword);
 		String condition = "prod_no";
 		
 		if (!CommonUtil.null2str(searchKeyword).equals("")) {
@@ -149,14 +162,15 @@ public class ProductDao extends AbstractDao {
 			}
 		}
 		
-		sql += "ORDER BY reg_date DESC NULLS LAST";
+		sql += "ORDER BY reg_date DESC NULLS LAST, prod_no ";
 		
 		int total = getTotalCount(sql);
-		Debug.printDataInDao("total", total);
+		Debug.printDataT2("total", total);
 		map.put("count", total);
 		
 		try {
 			sql = makeCurrentPageSql(sql, search);
+			Debug.printSQL(sql);
 			stmt = con.prepareStatement(sql);
 			rs = stmt.executeQuery();
 			
@@ -181,9 +195,78 @@ public class ProductDao extends AbstractDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			
+		} finally {
+			
+			try {
+				if (rs != null) rs.close();
+				if (stmt != null) stmt.close();
+				if (con != null) con.close();
+				
+			} catch (Exception e2) {
+				e2.printStackTrace();
+				
+			}
 		}
 		
+		Debug.endDaoMethod();
+		
 		return map;
+	}
+	
+	
+	// 상품번호로 상품정보를 조회하는 DBMS
+	public Product findProduct(int prodNo) {
+		
+		Debug.startDaoMethod("findProduct", "prodNo");
+		Debug.printDataT2("prodNo", prodNo);
+		
+		Connection con = DBUtil.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		Product product = new Product();
+		
+		String sql = "SELECT * " + 
+					 "FROM product " + 
+					 "WHERE prod_no = ? ";
+		
+		try {
+			Debug.printSQL(sql);
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, prodNo);
+			
+			rs = stmt.executeQuery();
+			
+			rs.next();
+			product.setProdNo(rs.getInt(1));
+			product.setProdName(rs.getString(2));
+			product.setProdDetail(rs.getString(3));
+			product.setManuDate(rs.getString(4));
+			product.setPrice(rs.getInt(5));
+			product.setFileName(rs.getString(6));
+			product.setRegDate(rs.getDate(7));
+			product.setProTranCode(rs.getString("pro_tran_code"));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			
+			try {
+				if (rs != null) rs.close();
+				if (stmt != null) stmt.close();
+				if (con != null) con.close();
+				
+			} catch (Exception e2) {
+				e2.printStackTrace();
+				
+			}
+			
+		}
+		
+		Debug.endDaoMethod();
+		
+		return product;
 	}
 
 }

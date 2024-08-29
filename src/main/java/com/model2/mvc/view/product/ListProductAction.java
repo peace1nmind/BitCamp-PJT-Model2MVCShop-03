@@ -40,7 +40,7 @@ public class ListProductAction extends Action {
 		
 		// 검색조건을 다루는 로직
 		Search search = new Search(getServletContext());
-		search.setCurrentPage(Debug.getParamInt(request, "page"));
+		search.setCurrentPage(Debug.getPage(request, "page"));
 		search.setSearchCondition(Debug.getParamStr(request, "searchCondition"));
 		search.setSearchKeyword(Debug.getParamStr(request, "searchKeyword"));
 		
@@ -50,12 +50,9 @@ public class ListProductAction extends Action {
 		// 검색한 리스트값들을 다루는 로직
 		ProductService productService = new ProductServiceImpl();
 		
-		
-		
-		
 		Map<String, Object> map = (menu.equals("search")) ? 
-									productService.getProductList(search) : 
-									productService.getProductList(search);
+									productService.getProductList(search, "1", false) : 
+									productService.getProductList(search, "3", false);
 		request.setAttribute("map", map);
 		request.setAttribute("list", map.get("list"));
 		

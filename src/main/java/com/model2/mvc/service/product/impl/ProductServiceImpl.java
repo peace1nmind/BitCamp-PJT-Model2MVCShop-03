@@ -24,7 +24,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Product getProduct(int prodNo) {
 
-		return null;
+		return productDao.findProduct(prodNo);
 	}
 
 	@Override

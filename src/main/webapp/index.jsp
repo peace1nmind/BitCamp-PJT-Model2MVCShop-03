@@ -1,4 +1,9 @@
+<%@page import="com.model2.mvc.Debug"%>
 <%@ page contentType="text/html; charset=euc-kr" %>
+
+<%
+	Debug.startJsp("index");
+%>
 
 <html>
 <head>
@@ -18,7 +23,9 @@
 
 <noframes>
 <body>
+<%
+	Debug.endJsp();
+%>
 </body>
 </noframes>
-
 </html>
