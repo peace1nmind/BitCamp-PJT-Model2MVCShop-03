@@ -1,5 +1,6 @@
 package com.model2.mvc.common;
 
+import javax.servlet.ServletContext;
 
 public class Search {
 	
@@ -11,6 +12,14 @@ public class Search {
 	
 	///Constructor
 	public Search() {
+	}
+	
+	public Search(ServletContext servletContext) {
+		if (servletContext != null) {
+			pageSize = Integer.parseInt(servletContext.getInitParameter("pageSize"));
+		} else {
+			throw new NullPointerException("servletContext is null");
+		}
 	}
 	
 	///Method
