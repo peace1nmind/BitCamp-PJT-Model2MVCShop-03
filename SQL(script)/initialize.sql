@@ -46,7 +46,7 @@ CREATE TABLE transaction (
 	receiver_phone		VARCHAR2(14),
 	dlvy_addr 				VARCHAR2(100),
 	dlvy_request 			VARCHAR2(100),
-	tran_status_code	CHAR(3),
+	tran_status_code	CHAR(3)		DEFAULT '2',
 	order_date 				DATE	DEFAULT SYSDATE,
 	dlvy_date 				DATE,
 	PRIMARY KEY(tran_no)

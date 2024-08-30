@@ -59,7 +59,6 @@ public class ListProductAction extends Action {
 		
 		// 페이징을 다루는 로직
 		Paging paging = new Paging(getServletContext());
-		System.out.println(map.get("count"));
 		paging.calculatePage((int) map.get("count"), search.getCurrentPage());
 		request.setAttribute("paging", paging);
 		

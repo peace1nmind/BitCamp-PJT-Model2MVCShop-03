@@ -50,6 +50,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public void updateTranCode(int prodNo, String proTranCode) {
+		productDao.updateProTranCode(prodNo, proTranCode);
 	}
 
 }

@@ -451,6 +451,54 @@ public class ProductDao extends AbstractDao {
 	}
 	
 	
+	// tranCode º¯°æ
+	public void updateProTranCode(int prodNo, String proTranCode) {
+		
+		Debug.startDaoMethod("updateProTranCode", "prodNo, proTranCode");
+		Debug.printDataT2("prodNo", prodNo);
+		Debug.printDataT2("proTranCode", proTranCode);
+		proTranCode = proTranCode.trim();
+		
+		Connection con = DBUtil.getConnection();
+		PreparedStatement stmt = null;
+		int rs = -1;
+		
+		String sql = "UPDATE product " + 
+					 "SET pro_tran_code=? " + 
+					 "WHERE prod_no=? ";
+		
+		try {
+			Debug.printSQL(sql);
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, proTranCode);
+			stmt.setInt(2, prodNo);
+			
+			rs = stmt.executeUpdate();
+			
+			Debug.printDataT2("rs", rs);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			
+			try {
+				if (stmt != null) stmt.close();
+				if (con != null) con.close();
+				
+			} catch	(Exception e2) {
+				e2.printStackTrace();
+				
+			}
+		}
+		
+		Debug.endDaoMethod();
+		
+	}
+	
 	
 
 }

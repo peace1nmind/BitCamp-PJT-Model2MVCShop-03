@@ -1,4 +1,4 @@
-package com.model2.mvc.view.product;
+package com.model2.mvc.view.purchase;
 // W D 
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,36 +10,28 @@ import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.product.impl.ProductServiceImpl;
 
-public class UpdateProductAction extends Action {
+public class AddPurchaseViewAction extends Action {
 
 	// Field
 
 	// Constructor
-	public UpdateProductAction() {
+	public AddPurchaseViewAction() {
 	}
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
-		Debug.startAction("UpdateProductAction");
+
+		Debug.startAction("AddPurchaseViewAction");
 		
 		ProductService productService = new ProductServiceImpl();
 		Product product = productService.getProduct(Debug.getParamInt(request, "prodNo"));
+		Debug.printDataT1("product", product);
 		
-		product.setProdName(Debug.getParamStr(request, "prodName"));
-		product.setProdDetail(Debug.getParamStr(request, "prodDetail"));
-		product.setManuDate(Debug.getParamStr(request, "manuDate"));
-		product.setPrice(Debug.getParamInt(request, "price"));
-		product.setFileName(Debug.getParamStr(request, "fileName"));
-		
-		Debug.printDataT1("updated product", product);
-		
-		request.setAttribute("product", productService.updateProduct(product));
+		request.setAttribute("product", product);
 		
 		Debug.endAction();
 		
-		return "forward:/product/updateProduct.jsp";
+		return "forward:/purchase/addPurchaseView.jsp";
 	}
-
 }
 // class end
