@@ -378,6 +378,7 @@ public class ProductDao extends AbstractDao {
 			try {
 				if (rss != null) rss.close();
 				if (stmt != null) stmt.close();
+				if (currStmt != null) currStmt.close();
 				if (con != null) con.close();
 				
 			} catch	(Exception e2) {
