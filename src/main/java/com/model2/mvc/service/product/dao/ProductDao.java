@@ -325,20 +325,27 @@ public class ProductDao extends AbstractDao {
 	
 	
 	// 상품등록
-	public void insertProduct(Product product) {
+	public int insertProduct(Product product) {
 		
 		Debug.startDaoMethod("insertProduct", "product");
 		Debug.printDataT2("product", product);
 		
 		Connection con = DBUtil.getConnection();
 		PreparedStatement stmt = null;
+		PreparedStatement currStmt = null;
 		int rs = -1;
+		ResultSet rss = null;
+		int prodNo = 0;
 		
 		String sql = "INSERT INTO product " + 
 					 "VALUES (seq_product_prod_no.NEXTVAL, " + 
 					 "?, ?, ?, ?, ?, SYSDATE, ?) ";
 		
+		String prodNoSql = "SELECT seq_product_prod_no.CURRVAL "
+						 + "FROM DUAL";
+		
 		try {
+			currStmt = con.prepareStatement(prodNoSql);
 			Debug.printSQL(sql);
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, product.getProdName());
@@ -352,6 +359,14 @@ public class ProductDao extends AbstractDao {
 			
 			Debug.printDataT2("rs", rs);
 			
+			if (rs > 0) {
+				rss = currStmt.executeQuery();
+				if (rss.next()) {
+					prodNo = rss.getInt(1);
+					Debug.printDataT2("prodNo", prodNo);
+				}
+			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			
@@ -361,6 +376,7 @@ public class ProductDao extends AbstractDao {
 		} finally {
 			
 			try {
+				if (rss != null) rss.close();
 				if (stmt != null) stmt.close();
 				if (con != null) con.close();
 				
@@ -372,6 +388,7 @@ public class ProductDao extends AbstractDao {
 		
 		Debug.endDaoMethod();
 		
+		return prodNo;
 	}
 	
 	

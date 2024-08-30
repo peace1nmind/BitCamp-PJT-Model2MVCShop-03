@@ -42,7 +42,6 @@ public class Product {
 	
 	public void setManuDate(String manuDate) {
 		manuDate = Debug.str2date(manuDate);
-		Debug.printDataT1("@@manuDate", manuDate);
 		this.manuDate = manuDate;
 	}
 	
