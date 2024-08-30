@@ -40,8 +40,9 @@ public class Paging {
 		System.out.println("Paging().calculatePage");
 		System.out.println("\ttotal= "+total);
 		this.total = total;
+		currentPage = (currentPage==0)? 1 : currentPage;
+		this.currentPage = currentPage;
 		System.out.println("\tcurrentPage= "+currentPage);
-		this.currentPage = (currentPage==0)? 1 : currentPage;
 		
 		if (total > 0) {
 			totalPage = (int) Math.ceil(total*1.0 / pageSize); 

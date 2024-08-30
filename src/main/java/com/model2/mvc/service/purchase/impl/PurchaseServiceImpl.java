@@ -34,13 +34,13 @@ public class PurchaseServiceImpl implements PurchaseService {
 	@Override
 	public Map<String, Object> getPurchaseList(Search search, String buyerId) {
 
-		return null;
+		return purchaseDao.getPurchaseList(search, buyerId);
 	}
 
 	@Override
 	public Map<String, Object> getPurchaseList(Search search, String buyerId, String tranCode, boolean over) {
 
-		return null;
+		return purchaseDao.getPurchaseList(search, buyerId, tranCode, over);
 	}
 
 	@Override
