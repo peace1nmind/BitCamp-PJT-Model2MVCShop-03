@@ -13,7 +13,7 @@ public class Purchase {
 	// 총 11개
 	private int tranNo;				// TRAN_NO			PK	구매번호 10000부터 시작
 	private Product purchaseProd;	// PROD_NO			NN	구매 물품 정보
-	private User buyer;			// BUYER_ID			NN	구매자 정보
+	private User buyer;				// BUYER_ID			NN	구매자 정보
 	private String paymentOption;	// PAYMENT_OPTION		지불방식 (1:현금구매, 2:신용구매)
 	private String receiverName;	// RECEIVER_NAME		받는사람 이름
 	private String receiverPhone;	// RECEIVER_PHONE		받는사람 연락처
@@ -68,7 +68,8 @@ public class Purchase {
 	}
 
 	public void setPaymentOption(String paymentOption) {
-		this.paymentOption = paymentOption.trim();
+		paymentOption = (paymentOption==null)? "1" : paymentOption.trim(); 
+		this.paymentOption = paymentOption;
 	}
 
 	public String getReceiverName() {

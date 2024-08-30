@@ -23,7 +23,7 @@ public interface PurchaseService {
 	
 	public Map<String, Object> getSaleList(Search search);
 	
-	public Map<String, Object> getDlvyList(Search search);
+	public Map<String, Object> getDlvyList(Search search, String buyerId);
 	
 	public Purchase updatePurchase(Purchase purchase);
 	

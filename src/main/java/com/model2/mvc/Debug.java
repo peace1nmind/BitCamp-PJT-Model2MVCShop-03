@@ -55,13 +55,18 @@ public abstract class Debug {
 	// Dao에서 T2
 	public static void printDataT2(String dataName, Object data) {
 		System.out.println(String.format("\t\t%s= %s",
-										dataName, (data==null)? "null" : data.toString()));
+										dataName, null2str(data)));
+		
 	}
 	
 	// Action에선 T1
 	public static void printDataT1(String dataName, Object data) {
 		System.out.println(String.format("\t%s= %s",
-										dataName, data.toString()));
+										dataName, null2str(data)));
+	}
+	
+	public static String null2str(Object obj) {
+		return (obj==null)? "" : obj.toString();
 	}
 	
 	public static void startAction(String actionName) {

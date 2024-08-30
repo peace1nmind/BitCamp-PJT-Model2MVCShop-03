@@ -247,7 +247,7 @@ public class PurchaseDao extends AbstractDao {
 	}
 	
 	
-	// 구매자의 구매이력 조회 (전체 ROW)
+	// 구매자의 구매이력 조회 (tranCode기준 이상, 이하)
 	public Map<String, Object> getPurchaseList(Search search, String buyerId, String tranCode, boolean over) {
 		
 		Debug.startDaoMethod("getPurchaseList", "search");
@@ -325,6 +325,144 @@ public class PurchaseDao extends AbstractDao {
 		return map;
 
 	}
+	
+	
+	// 구매자의 구매이력 조회 (tranCode기준 이상, 이하)
+	public Map<String, Object> getPurchaseList(Search search, String buyerId, String tranCode) {
+		
+		Debug.startDaoMethod("getPurchaseList", "search");
+		Debug.printDataT2("search", search);
+		Debug.printDataT2("buyerId", buyerId);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		Connection con = DBUtil.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		String sql = "SELECT * " + 
+				"FROM transaction " + 
+				"WHERE buyer_id='"+ buyerId + "' " + 
+				"AND tran_status_code='" + tranCode + "' " +
+				"ORDER BY order_date DESC ";
+		
+		try {
+			int total = getTotalCount(sql);
+			Debug.printDataT2("total", total);
+			map.put("count", total);
+			
+			sql = makeCurrentPageSql(sql, search);
+			stmt = con.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			
+			List<Purchase> list = new ArrayList<Purchase>();
+			
+			while (rs.next()) {
+				Purchase purchase = new Purchase();
+				purchase.setTranNo(rs.getInt(1));
+				purchase.setPurchaseProd(productService.getProduct(rs.getInt(2)));
+				purchase.setBuyer(userService.getUser(rs.getString(3)));
+				purchase.setPaymentOption(rs.getString(4));
+				purchase.setReceiverName(rs.getString(5));
+				purchase.setReceiverPhone(rs.getString(6));
+				purchase.setDlvyAddr(rs.getString(7));
+				purchase.setDlvyRequest(rs.getString(8));
+				purchase.setTranCode(rs.getString(9));
+				purchase.setOrderDate(rs.getDate(10));
+				purchase.setDlvyDate(rs.getString(11));
+				
+				Debug.printDataT2("tranNo", purchase.getTranNo());
+				Debug.printDataT2("prodNo", purchase.getPurchaseProd().getProdNo());
+				Debug.printDataT2("tranCode", purchase.getTranCode());
+				System.out.println();
+				
+				list.add(purchase);
+			}
+			
+			map.put("list", list);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			
+			try {
+				if (rs != null) rs.close();
+				if (stmt != null) stmt.close();
+				if (con != null) con.close();
+				
+			} catch	(Exception e2) {
+				e2.printStackTrace();
+				
+			}
+		}
+		
+		Debug.endDaoMethod();
+		
+		return map;
+
+	}
+	
+	
+	// 구매정보 수정
+	public void updatePurchase(Purchase purchase) {
+		
+		Debug.startDaoMethod("updatePurchase", "purchase");
+		Debug.printDataT2("purchase", purchase);
+		
+		Connection con = DBUtil.getConnection();
+		PreparedStatement stmt = null;
+		int rs = -1;
+		
+		String sql = "UPDATE transaction " + 
+					 "SET payment_option=?, " + 
+					 	 "receiver_name=?, " + 
+					 	 "receiver_phone=?, " + 
+					 	 "dlvy_addr=?, " + 
+					 	 "dlvy_request=?, " + 
+					 	 "dlvy_date=? " + 
+					 "WHERE tran_no=? ";
+		
+		try {
+			Debug.printSQL(sql);
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, purchase.getPaymentOption());
+			stmt.setString(2, purchase.getReceiverName());
+			stmt.setString(3, purchase.getReceiverPhone());
+			stmt.setString(4, purchase.getDlvyAddr());
+			stmt.setString(5, purchase.getDlvyRequest());
+			stmt.setDate(6, purchase.getOrderDate());
+			stmt.setInt(7, purchase.getTranNo());
+			
+			rs = stmt.executeUpdate();
+			
+			Debug.printDataT2("rs", rs);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			
+			try {
+				if (stmt != null) stmt.close();
+				if (con != null) con.close();
+				
+			} catch	(Exception e2) {
+				e2.printStackTrace();
+				
+			}
+		}
+		
+		Debug.endDaoMethod();
+		
+	}
+	
 
 }
 // class end

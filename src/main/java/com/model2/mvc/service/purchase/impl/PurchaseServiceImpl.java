@@ -50,25 +50,23 @@ public class PurchaseServiceImpl implements PurchaseService {
 	}
 
 	@Override
-	public Map<String, Object> getDlvyList(Search search) {
+	public Map<String, Object> getDlvyList(Search search, String buyerId) {
 
-		return null;
+		return purchaseDao.getPurchaseList(search, buyerId, "3");
 	}
 
 	@Override
 	public Purchase updatePurchase(Purchase purchase) {
-
-		return null;
+		
+		purchaseDao.updatePurchase(purchase);
+		
+		return purchaseDao.findPurchase(purchase.getTranNo());
 	}
 
 	@Override
 	public void updateTranCode(Purchase purchase) {
 	}
 
-	// Method
-	//public  () {
-	//	
-	//}
 
 }
 // class end
