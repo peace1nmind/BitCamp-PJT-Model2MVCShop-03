@@ -33,8 +33,8 @@ public class UpdateProductAction extends Action {
 		product.setFileName(Debug.getParamStr(request, "fileName"));
 		
 		Debug.printDataT1("updated product", product);
-		Product prod = productService.updateProduct(product);
-		request.setAttribute("product", prod);
+		
+		request.setAttribute("product", productService.updateProduct(product));
 		
 		Debug.endAction();
 		
