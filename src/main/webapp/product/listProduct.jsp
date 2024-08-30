@@ -132,7 +132,7 @@
 							<td></td>
 									
 							<td align="left">
-								<a href="/${navi }?prodNo=${product.prodNo }&menu=${menu}">
+								<a href="/${navi }?prodNo=${product.prodNo }">
 									${product.prodName }
 								</a>
 							</td>
@@ -232,3 +232,5 @@
 		</div>
 	</body>
 </html>
+
+<%	Debug.endJsp(); %>

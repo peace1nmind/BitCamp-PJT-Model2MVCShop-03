@@ -361,9 +361,11 @@ public class ProductDao extends AbstractDao {
 			
 			if (rs > 0) {
 				rss = currStmt.executeQuery();
+				
 				if (rss.next()) {
 					prodNo = rss.getInt(1);
 					Debug.printDataT2("prodNo", prodNo);
+					
 				}
 			}
 			
@@ -391,6 +393,63 @@ public class ProductDao extends AbstractDao {
 		
 		return prodNo;
 	}
+	
+	
+	// 상품정보 수정
+	// 상품명, 상품상세정보, 제조일자, 가격, 상품이미지
+	public void updateProduct(Product product) {
+		
+		Debug.startDaoMethod("updateProduct", "product");
+		Debug.printDataT2("product", product);
+		
+		Connection con = DBUtil.getConnection();
+		PreparedStatement stmt = null;
+		int rs = -1;
+		
+		String sql = "UPDATE product "
+					+"SET prod_name=?, "
+					+ 	 "prod_detail=?, "
+					+ 	 "manufacture_day=?, "
+					+ 	 "price=?, "
+					+ 	 "image_file=? "
+					+"WHERE prod_no=? ";
+		
+		try {
+			Debug.printSQL(sql);
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, product.getProdName());
+			stmt.setString(2, product.getProdDetail());
+			stmt.setString(3, product.getManuDate());
+			stmt.setInt(4, product.getPrice());
+			stmt.setString(5, product.getFileName());
+			stmt.setInt(6, product.getProdNo());
+			
+			rs = stmt.executeUpdate();
+			
+			Debug.printDataT2("rs", rs);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			
+			try {
+				if (stmt != null) stmt.close();
+				if (con != null) con.close();
+				
+			} catch	(Exception e2) {
+				e2.printStackTrace();
+				
+			}
+		}
+		
+		Debug.endDaoMethod();
+		
+	}
+	
 	
 	
 

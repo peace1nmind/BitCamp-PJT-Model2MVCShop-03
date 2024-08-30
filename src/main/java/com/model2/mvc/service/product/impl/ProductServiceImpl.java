@@ -43,17 +43,14 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Product updateProduct(Product product) {
 
-		return null;
+		productDao.updateProduct(product);
+		
+		return productDao.findProduct(product.getProdNo());
 	}
 
 	@Override
 	public void updateTranCode(int prodNo, String proTranCode) {
 	}
-
-	// Method
-	//public  () {
-	//	
-	//}
 
 }
 // class end
