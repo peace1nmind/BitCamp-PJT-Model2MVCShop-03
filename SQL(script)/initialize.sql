@@ -143,32 +143,22 @@ insert into product values (seq_product_prod_no.nextval,'삼성센스','노트북','201
 
 commit;
 
+INSERT INTO product(prod_no, prod_name, price) VALUES(seq_product_prod_no.NEXTVAL, 'testProduct01', 1111);
+INSERT INTO product(prod_no, prod_name, price) VALUES(seq_product_prod_no.NEXTVAL, 'testProduct02', 2222);
+INSERT INTO product(prod_no, prod_name, price) VALUES(seq_product_prod_no.NEXTVAL, 'testProduct03', 3333);
+INSERT INTO product(prod_no, prod_name, price) VALUES(seq_product_prod_no.NEXTVAL, 'testProduct04', 4444);
+INSERT INTO product(prod_no, prod_name, price) VALUES(seq_product_prod_no.NEXTVAL, 'testProduct05', 5555);
+INSERT INTO product(prod_no, prod_name, price) VALUES(seq_product_prod_no.NEXTVAL, 'testProduct06', 6666);
+INSERT INTO product(prod_no, prod_name, price) VALUES(seq_product_prod_no.NEXTVAL, 'testProduct07', 7777);
+INSERT INTO product(prod_no, prod_name, price) VALUES(seq_product_prod_no.NEXTVAL, 'testProduct08', 8888);
+INSERT INTO product(prod_no, prod_name, price) VALUES(seq_product_prod_no.NEXTVAL, 'testProduct09', 9999);
+INSERT INTO product(prod_no, prod_name, price) VALUES(seq_product_prod_no.NEXTVAL, 'testProduct10', 1010);
+INSERT INTO product(prod_no, prod_name, price) VALUES(seq_product_prod_no.NEXTVAL, 'testProduct11', 1111);
+INSERT INTO product(prod_no, prod_name, price) VALUES(seq_product_prod_no.NEXTVAL, 'testProduct12', 1212);
+INSERT INTO product(prod_no, prod_name, price) VALUES(seq_product_prod_no.NEXTVAL, 'testProduct13', 1313);
+INSERT INTO product(prod_no, prod_name, price) VALUES(seq_product_prod_no.NEXTVAL, 'testProduct14', 1414);
+INSERT INTO product(prod_no, prod_name, price) VALUES(seq_product_prod_no.NEXTVAL, 'testProduct15', 1515);
+INSERT INTO product(prod_no, prod_name, price) VALUES(seq_product_prod_no.NEXTVAL, 'testProduct16', 1616);
+INSERT INTO product(prod_no, prod_name, price) VALUES(seq_product_prod_no.NEXTVAL, 'testProduct17', 1717);
 
-
-//== Page 처리을 위한 SQL 구성연습
-
-SELECT user_id , user_name , email
-FROM users
-ORDER BY user_id
-
-currentPage =2
-pageSize = 3   
-4 ~ 6
-
-SELECT inner_table. * ,  ROWNUM AS row_seq
-FROM (	SELECT user_id , user_name , email
-				FROM users
-				ORDER BY user_id ) inner_table
-WHERE ROWNUM <=6;	
-//==>           currentPage * paseSize
-
-
-SELECT * 
-FROM (	SELECT inner_table. * ,  ROWNUM AS row_seq
-				FROM (	SELECT user_id , user_name , email
-								FROM users
-								ORDER BY user_id ) inner_table
-				WHERE ROWNUM <=6 )
-WHERE row_seq BETWEEN 4 AND 6;
-
-//==> (currentPage-1) * paseSize+1           currentPage * paseSize
+COMMIT;
