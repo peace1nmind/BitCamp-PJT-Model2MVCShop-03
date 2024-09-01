@@ -229,9 +229,7 @@
 		
 		<%	System.out.println("\tinclude ¹ß»ý: listPurchaseHistory.jsp"); %>
 		<%--<jsp:include page="listPurchaseHistory.jsp"></jsp:include>--%>
-		<%--<%@ include file="listPurchaseHistory.jsp" %>--%>
-		
-		
+		<%@ include file="listPurchaseHistory.jsp" %>
 		
 	</body>
 </html>

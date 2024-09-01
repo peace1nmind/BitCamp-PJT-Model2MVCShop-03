@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.model2.mvc.Debug;
 import com.model2.mvc.common.Paging;
@@ -30,7 +31,16 @@ public class ListPurchaseAction extends Action {
 		
 		Debug.startAction("ListPurchaseAction");
 		
-		User buyer = (User) request.getSession().getAttribute("user");
+		
+		HttpSession session = request.getSession();
+		User buyer = (User) session.getAttribute("user");
+		
+		/* listPurchase를 위한 로직 */
+		// 로그인 되어있지 않으면 로그인 화면으로 redirect
+		if (buyer == null) {
+			return "redirect:/user/loginView.jsp";
+		}
+		
 		Search search = new Search(getServletContext());
 		
 		search.setCurrentPage(Debug.getPage(request, "page"));
@@ -49,6 +59,20 @@ public class ListPurchaseAction extends Action {
 		request.setAttribute("list", list);
 		request.setAttribute("paging", paging);
 		request.setAttribute("tranCodeMap", TranCodeMapper.getInstance().getMap());
+		
+		
+		/* listPurchaseHistory를 위한 로직 */
+		Search historySearch  = new Search(getServletContext());
+		
+		historySearch.setCurrentPage(Debug.getPage(request, "historyPage"));
+		
+		Map<String, Object> historyMap = purchaseService.getPurchaseList(historySearch, buyer.getUserId(), "4", true);
+		
+		Paging historyPaging = new Paging(getServletContext());
+		historyPaging.calculatePage((int) historyMap.get("count"), historySearch.getCurrentPage());
+		
+		request.setAttribute("historyMap", historyMap);
+		request.setAttribute("historyPaging", historyPaging);
 		
 		Debug.endAction();
 		
