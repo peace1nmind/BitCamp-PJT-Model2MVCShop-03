@@ -63,7 +63,6 @@ public class ListPurchaseAction extends Action {
 		
 		/* listPurchaseHistory를 위한 로직 */
 		Search historySearch  = new Search(getServletContext());
-		
 		historySearch.setCurrentPage(Debug.getPage(request, "historyPage"));
 		
 		Map<String, Object> historyMap = purchaseService.getPurchaseList(historySearch, buyer.getUserId(), "4", true);

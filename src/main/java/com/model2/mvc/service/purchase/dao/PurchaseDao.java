@@ -95,6 +95,69 @@ public class PurchaseDao extends AbstractDao {
 	}
 	
 	
+	// 구매이력 한개 검색
+	public Purchase findPurchaseByProd(int prodNo) {
+		
+		Debug.startDaoMethod("findPurchase", "prodNo");
+		Debug.printDataT2("prodNo", prodNo);
+		
+		Connection con = DBUtil.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		Purchase purchase = new Purchase();
+		
+		String sql = "SELECT * " + 
+				"FROM transaction " + 
+				"WHERE prod_no=? ";
+		
+		try {
+			Debug.printSQL(sql);
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, prodNo);
+			
+			rs = stmt.executeQuery();
+			
+			rs.next();
+			purchase.setTranNo(rs.getInt(1));
+			purchase.setPurchaseProd(productService.getProduct(rs.getInt(2)));
+			purchase.setBuyer(userService.getUser(rs.getString(3)));
+			purchase.setPaymentOption(rs.getString(4));
+			purchase.setReceiverName(rs.getString(5));
+			purchase.setReceiverPhone(rs.getString(6));
+			purchase.setDlvyAddr(rs.getString(7));
+			purchase.setDlvyRequest(rs.getString(8));
+			purchase.setTranCode(rs.getString(9));
+			purchase.setOrderDate(rs.getDate(10));
+			purchase.setDlvyDate(rs.getString(11));
+			
+			Debug.printDataT2("purchase", purchase);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			
+			try {
+				if (rs != null) rs.close();
+				if (stmt != null) stmt.close();
+				if (con != null) con.close();
+				
+			} catch	(Exception e2) {
+				e2.printStackTrace();
+				
+			}
+		}
+		
+		Debug.endDaoMethod();
+		
+		return purchase;
+	}
+
+	
 	// 구매
 	public int insertPurchase(Purchase purchase) {
 		
@@ -327,7 +390,7 @@ public class PurchaseDao extends AbstractDao {
 	}
 	
 	
-	// 구매자의 구매이력 조회 (tranCode기준 이상, 이하)
+	// 구매자의 구매이력 조회 (특정 tranCode)
 	public Map<String, Object> getPurchaseList(Search search, String buyerId, String tranCode) {
 		
 		Debug.startDaoMethod("getPurchaseList", "search");
@@ -344,6 +407,84 @@ public class PurchaseDao extends AbstractDao {
 				"FROM transaction " + 
 				"WHERE buyer_id='"+ buyerId + "' " + 
 				"AND tran_status_code='" + tranCode + "' " +
+				"ORDER BY order_date DESC ";
+		
+		try {
+			int total = getTotalCount(sql);
+			Debug.printDataT2("total", total);
+			map.put("count", total);
+			
+			sql = makeCurrentPageSql(sql, search);
+			stmt = con.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			
+			List<Purchase> list = new ArrayList<Purchase>();
+			
+			while (rs.next()) {
+				Purchase purchase = new Purchase();
+				purchase.setTranNo(rs.getInt(1));
+				purchase.setPurchaseProd(productService.getProduct(rs.getInt(2)));
+				purchase.setBuyer(userService.getUser(rs.getString(3)));
+				purchase.setPaymentOption(rs.getString(4));
+				purchase.setReceiverName(rs.getString(5));
+				purchase.setReceiverPhone(rs.getString(6));
+				purchase.setDlvyAddr(rs.getString(7));
+				purchase.setDlvyRequest(rs.getString(8));
+				purchase.setTranCode(rs.getString(9));
+				purchase.setOrderDate(rs.getDate(10));
+				purchase.setDlvyDate(rs.getString(11));
+				
+				Debug.printDataT2("tranNo", purchase.getTranNo());
+				Debug.printDataT2("prodNo", purchase.getPurchaseProd().getProdNo());
+				Debug.printDataT2("tranCode", purchase.getTranCode());
+				System.out.println();
+				
+				list.add(purchase);
+			}
+			
+			map.put("list", list);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			
+			try {
+				if (rs != null) rs.close();
+				if (stmt != null) stmt.close();
+				if (con != null) con.close();
+				
+			} catch	(Exception e2) {
+				e2.printStackTrace();
+				
+			}
+		}
+		
+		Debug.endDaoMethod();
+		
+		return map;
+
+	}
+	
+	
+	// 구매완료된 상품리스트
+	public Map<String, Object> getSaleList(Search search) {
+		
+		Debug.startDaoMethod("getPurchaseList", "search");
+		Debug.printDataT2("search", search);
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		Connection con = DBUtil.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		String sql = "SELECT * " + 
+				"FROM transaction " + 
+				"WHERE tran_status_code = '2' " + 
 				"ORDER BY order_date DESC ";
 		
 		try {
@@ -459,6 +600,52 @@ public class PurchaseDao extends AbstractDao {
 			}
 		}
 		
+		Debug.endDaoMethod();
+		
+	}
+	
+	
+	public void updateTranStatusCode(Purchase purchase, String tranCode) {
+		
+		Debug.startDaoMethod("updateTranCode", "purchase");
+		Debug.printDataT2("purchase", purchase);
+		Debug.printDataT2("tranCode", tranCode);
+		
+		Connection con = DBUtil.getConnection();
+		PreparedStatement stmt = null;
+		int rs = -1;
+		
+		String sql = "UPDATE transaction " + 
+					 "SET tran_status_code=? " + 
+					 "WHERE tran_no=? ";
+		
+		try {
+			Debug.printSQL(sql);
+			stmt.setString(1, tranCode);
+			stmt.setInt(2, purchase.getTranNo());
+			
+			rs = stmt.executeUpdate();
+			
+			Debug.printDataT2("rs", rs);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			
+			try {
+				if (stmt != null) stmt.close();
+				if (con != null) con.close();
+				
+			} catch	(Exception e2) {
+				e2.printStackTrace();
+				
+			}
+		}
+
 		Debug.endDaoMethod();
 		
 	}

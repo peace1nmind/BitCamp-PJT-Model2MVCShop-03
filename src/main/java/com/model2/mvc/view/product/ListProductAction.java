@@ -16,6 +16,8 @@ import com.model2.mvc.service.TranCodeMapper;
 import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.product.impl.ProductServiceImpl;
+import com.model2.mvc.service.purchase.PurchaseService;
+import com.model2.mvc.service.purchase.impl.PurchaseServiceImpl;
 
 public class ListProductAction extends Action {
 
@@ -48,12 +50,11 @@ public class ListProductAction extends Action {
 		request.setAttribute("search", search);
 		
 		
+		/* 판매중인 상품들 */
 		// 검색한 리스트값들을 다루는 로직
 		ProductService productService = new ProductServiceImpl();
 		
-		Map<String, Object> map = (menu.equals("search")) ? 
-									productService.getProductList(search, "1", false) : 
-									productService.getProductList(search, "3", false);
+		Map<String, Object> map = productService.getProductList(search, "1", false);
 		request.setAttribute("map", map);
 		request.setAttribute("list", map.get("list"));
 		
@@ -63,11 +64,24 @@ public class ListProductAction extends Action {
 		paging.calculatePage((int) map.get("count"), search.getCurrentPage());
 		request.setAttribute("paging", paging);
 		
-		int no = ((List<Product>) map.get("list")).size();
-		request.setAttribute("no", no);
-		
 		Map<String, String> tranCodeMap = TranCodeMapper.getInstance().getMap();
 		request.setAttribute("tranCodeMap", tranCodeMap);
+		
+		
+		/* 구매완료 상품들 */
+		PurchaseService purchaseService = new PurchaseServiceImpl();
+		
+		Search saleSearch = new Search(getServletContext());
+		saleSearch.setCurrentPage(Debug.getPage(request, "salePage"));
+		
+		Map<String, Object> saleMap = purchaseService.getSaleList(saleSearch);
+		request.setAttribute("saleMap", saleMap);
+		
+		Paging salePaging = new Paging(getServletContext());
+		salePaging.calculatePage((int) saleMap.get("count"), saleSearch.getCurrentPage());
+		
+		request.setAttribute("saleMap", saleMap);
+		request.setAttribute("salePaging", salePaging);
 		
 		Debug.endAction();
 		

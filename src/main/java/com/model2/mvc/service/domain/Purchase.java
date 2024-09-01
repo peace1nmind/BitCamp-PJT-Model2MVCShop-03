@@ -88,12 +88,18 @@ public class Purchase {
 		
 		String phone = "";
 		
-		if (receiverPhone.contains("-")) {
+		if (receiverPhone==null) {
+			receiverPhone = "";
+			
+		} else if (receiverPhone.contains("-")) {
+	
 			for (String p : receiverPhone.split("-")) {
 				phone += p;
+				
 			}
 			
 			receiverPhone = phone;
+			
 		}
 		
 		this.receiverPhone = receiverPhone;

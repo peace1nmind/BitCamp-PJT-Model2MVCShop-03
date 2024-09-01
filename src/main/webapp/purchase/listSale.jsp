@@ -1,25 +1,18 @@
-<%-- 구매완료목록 화면 --%>
-<%-- listPurchaseHistory.do --%>
 <%@page import="com.model2.mvc.Debug"%>
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
     
-<%@	taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%	Debug.startJsp("listPurchaseHistory"); %>
+<%	Debug.startJsp("listSale"); %>
 
-<%	
-	Debug.printDataT1("historyMap", request.getAttribute("historyMap")); 
-	Debug.printDataT1("historyPaing", request.getAttribute("historyPaing"));	
-%>
-    
 <!DOCTYPE html>
 
 <html>
 
 	<head>
 	
-		<title>구매목록 조회</title>
+		<title>구매완료 목록</title>
 	
 		<link rel="stylesheet" href="/css/admin.css" type="text/css">
 	
@@ -51,7 +44,7 @@
 				<table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
 				
 					<tr>
-						<td colspan="11">전체 ${historyMap.count } 건수, 현재 ${historyPaging.currentPage } 페이지</td>
+						<td colspan="11">전체 ${saleMap.count } 건수, 현재 ${salePaging.currentPage } 페이지</td>
 					</tr>
 					<tr>
 						<td class="ct_list_b" width="50">No</td>
@@ -72,7 +65,7 @@
 						<td colspan="11" bgcolor="808285" height="1"></td>
 					</tr>
 					
-					<c:forEach var="purchase" items="${historyMap.list }" varStatus="status">
+					<c:forEach var="purchase" items="${saleMap.list }" varStatus="status">
 						<tr class="ct_list_pop">
 							<td align="center">
 								${status.count }
@@ -116,14 +109,17 @@
 							
 							<td></td>
 							
-							<%-- 정보수정(구매확정) --%>
+							<%-- 정보수정(배송하기) --%>
 							<td align="left">
 						
-								<a href="/updateTranCode.do?tranNo=${purchase.tranNo }
-															&tranCode=4
-															&page=${historyPaging.currentPage }">
-									구매확정
-								</a>
+								<c:if test="${menu=='manage' && purchase.purchaseProd.proTranCode=='2' }">
+									&nbsp;
+									<a href="/updateTranCodeByProd.do?page=${salePaging.currentPage }
+																	 &prodNo=${purchase.purchaseProd.prodNo }
+																	 &tranCode=${purchase.purchaseProd.proTranCode }">
+										배송하기
+									</a>
+								</c:if>
 								
 							</td>
 						</tr>
@@ -152,24 +148,27 @@
 					<tr>
 						<td align="center">
 
-							<a href="/listPurchase.do?historyPage=1" 
-							${(historyPaging.left)? "":"class='disabled'" }>
+							<a href="/listProduct.do?menu=manage
+													&salePage=1" 
+							${(salePaging.left)? "":"class='disabled'" }>
 								<span>◀</span>
 							</a>
 							
 							&nbsp;
 							
-							<a href="/listPurchase.do?historyPage=${historyPaging.start - 1 }" 
-							${(historyPaging.left)? "":"class='disabled'" }>
+							<a href="/listProduct.do?menu=manage
+													&salePage=${salePaging.start - 1 }" 
+							${(salePaging.left)? "":"class='disabled'" }>
 								<span>이전</span>
 							</a>
 					
 							&nbsp;&nbsp;
 							
-							<c:forEach begin="${historyPaging.start }" end="${historyPaging.end }" varStatus="status">
+							<c:forEach begin="${salePaging.start }" end="${salePaging.end }" varStatus="status">
 							
-								<a href="/listPurchase.do?historyPage=${status.count }" 
-								${(historyPaging.currentPage==status.count)? "style='font-weight: bold; font-size: 15px'" : "" }>
+								<a href="/listProduct.do?menu=manage
+														&salePage=${status.count }" 
+								${(salePaging.currentPage==status.count)? "style='font-weight: bold; font-size: 15px'" : "" }>
 									${status.count }
 								</a> 
 								
@@ -177,15 +176,17 @@
 
 							&nbsp;&nbsp;
 							
-							<a href="/listPurchase.do?historyPage=${historyPaging.end + 1 }" 
-							${(historyPaging.right)? "":"class='disabled'" }>
+							<a href="/listProduct.do?menu=manage
+														 &salePage=${salePaging.end + 1 }" 
+							${(salePaging.right)? "":"class='disabled'" }>
 								<span>다음</span>
 							</a>
 							
 							&nbsp;
 							
-							<a href="/listPurchase.do?historyPage=${historyPaing.totalPage }" 
-							${(historyPaging.right)? "":"class='disabled'" }>
+							<a href="/listProduct.do?menu=manage
+														 &salePage=${salePaging.totalPage }" 
+							${(salePaging.right)? "":"class='disabled'" }>
 								<span>▶</span>
 							</a>
 

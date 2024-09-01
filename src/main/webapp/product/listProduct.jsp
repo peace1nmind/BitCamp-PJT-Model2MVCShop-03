@@ -145,14 +145,6 @@
 							
 							<td align="left">
 								${tranCodeMap[product.proTranCode] }
-								
-							<c:if test="${menu=='manage' && product.proTranCode=='2' }">
-								&nbsp;
-								<a href="/updateTranCodeByProd.do?page=${paging.currentPage }&prodNo=${product.prodNo}">
-									배송하기
-								</a>
-							</c:if>
-							
 							</td>	
 						</tr>
 						<tr>
@@ -227,6 +219,14 @@
 			</form>
 		
 		</div>
+		
+		<br><br>
+		
+		<c:if test="${menu=='manage' }">
+			<%	System.out.println("\tinclude 발생: listSale.jsp"); %>
+			<%--<jsp:include page="/purchase/listSale.jsp"></jsp:include>--%>
+			<%@ include file="../purchase/listSale.jsp" %>
+		</c:if>
 	</body>
 </html>
 

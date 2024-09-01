@@ -5,12 +5,14 @@ import java.util.Map;
 
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Purchase;
+import com.model2.mvc.service.product.dao.ProductDao;
 import com.model2.mvc.service.purchase.dao.PurchaseDao;
 
 public interface PurchaseService {
 	
 	// Field
 	PurchaseDao purchaseDao = new PurchaseDao();
+	ProductDao productDao = new ProductDao();
 
 	// Method
 	public Purchase addPurchase(Purchase purchase);
@@ -27,7 +29,9 @@ public interface PurchaseService {
 	
 	public Purchase updatePurchase(Purchase purchase);
 	
-	public void updateTranCode(Purchase purchase);
+	public void updateTranCode(Purchase purchase, String tranCode);
+	
+	public void updateTranCodeByProd(int prodNo, String tranCode);
 
 }
 // class end

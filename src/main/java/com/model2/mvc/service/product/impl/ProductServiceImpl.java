@@ -3,9 +3,12 @@ package com.model2.mvc.service.product.impl;
 
 import java.util.Map;
 
+import com.model2.mvc.Debug;
 import com.model2.mvc.common.Search;
+import com.model2.mvc.service.TranCodeMapper;
 import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.product.ProductService;
+import com.model2.mvc.service.purchase.dao.PurchaseDao;
 
 public class ProductServiceImpl implements ProductService {
 
@@ -50,7 +53,10 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public void updateTranCode(int prodNo, String proTranCode) {
-		productDao.updateProTranCode(prodNo, proTranCode);
+		
+		if (Debug.tranCodeCheck(proTranCode)) {
+			productDao.updateProTranCode(prodNo, proTranCode);
+		}
 	}
 
 }

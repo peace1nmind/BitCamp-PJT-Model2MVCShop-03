@@ -3,6 +3,7 @@ package com.model2.mvc.service.purchase.impl;
 
 import java.util.Map;
 
+import com.model2.mvc.Debug;
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Purchase;
 import com.model2.mvc.service.product.dao.ProductDao;
@@ -46,7 +47,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 	@Override
 	public Map<String, Object> getSaleList(Search search) {
 
-		return null;
+		return purchaseDao.getSaleList(search);
 	}
 
 	@Override
@@ -64,7 +65,23 @@ public class PurchaseServiceImpl implements PurchaseService {
 	}
 
 	@Override
-	public void updateTranCode(Purchase purchase) {
+	public void updateTranCode(Purchase purchase, String tranCode) {
+		
+		if (Debug.tranCodeCheck(tranCode)) {
+			productDao.updateProTranCode(purchase.getPurchaseProd().getProdNo(), tranCode);
+			purchaseDao.updateTranStatusCode(purchase, tranCode);
+		}
+	}
+
+	@Override
+	public void updateTranCodeByProd(int prodNo, String tranCode) {
+		
+		Purchase purchase = purchaseDao.findPurchaseByProd(prodNo);
+		
+		if (Debug.tranCodeCheck(tranCode)) {
+			productDao.updateProTranCode(prodNo, tranCode);
+			purchaseDao.updateTranStatusCode(purchase, tranCode);
+		}
 	}
 
 

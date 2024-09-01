@@ -1,9 +1,12 @@
 package com.model2.mvc;
 // W D 
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import com.model2.mvc.common.util.CommonUtil;
+import com.model2.mvc.service.TranCodeMapper;
 
 public abstract class Debug {
 	
@@ -87,7 +90,7 @@ public abstract class Debug {
 	
 	public static int getParamInt(HttpServletRequest request, String paramName) {
 		String paramValue = request.getParameter(paramName);
-		int intValue = (paramValue==null || paramValue.equals(""))? 0 : Integer.parseInt(paramValue);
+		int intValue = (paramValue==null || paramValue.equals(""))? 0 : Integer.parseInt(paramValue.trim());
 		System.out.println(String.format("\t%s= %d", 
 										paramName, intValue));
 		
@@ -96,7 +99,7 @@ public abstract class Debug {
 	
 	public static int getPage(HttpServletRequest request, String paramName) {
 		String paramValue = request.getParameter(paramName);
-		int intValue = (paramValue==null || paramValue.equals(""))? 1 : Integer.parseInt(paramValue);
+		int intValue = (paramValue==null || paramValue.equals(""))? 1 : Integer.parseInt(paramValue.trim());
 		System.out.println(String.format("\t%s= %d", 
 										paramName, intValue));
 		
@@ -130,6 +133,29 @@ public abstract class Debug {
 		}
 		
 		return dateStr;
+	}
+	
+	public static boolean tranCodeCheck(String tranCode) {
+		
+		boolean result = false;
+		
+		Map<String, String> tranCodeMap = TranCodeMapper.getInstance().getMap();
+		
+		try {
+			if (!tranCodeMap.containsKey(tranCode)) {
+				throw new Exception("¿ÇÁö¾ÊÀº tranCode");
+				
+			} else {
+				result = true;
+				
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+		
+		return result;
 	}
 	
 }
