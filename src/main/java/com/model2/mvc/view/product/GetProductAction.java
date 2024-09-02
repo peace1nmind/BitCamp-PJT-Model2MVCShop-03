@@ -59,17 +59,17 @@ public class GetProductAction extends Action {
 				value = prodNo + "&" + historyValue;
 				
 			} else {
-				for (String s : historyValue.split(prodNo)) {
-					value += s;
-					
-				}
+				value = historyValue.replace(prodNo, "");
 				
 				String[] splittedValue = value.split("&");
 				value = "";
 				
 				for (int i = 0; i < splittedValue.length; i++) {
-					value += splittedValue[i] + ((i < splittedValue.length -1)? "&" : "");
 					
+					if (!(splittedValue[i]==null || splittedValue[i].equals(""))) {
+						value += splittedValue[i] + ((i < splittedValue.length -1)? "&" : "");
+						
+					}
 				}
 				
 				value = prodNo + "&" + value;

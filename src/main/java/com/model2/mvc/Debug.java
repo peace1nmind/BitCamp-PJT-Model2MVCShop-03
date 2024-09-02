@@ -126,13 +126,11 @@ public abstract class Debug {
 		str = CommonUtil.null2str(str);
 		str = str.split(" ")[0];
 		
-		String dateStr = "";
-		
-		for (String s : str.split("-")) {
-			dateStr += s;
+		if (str.contains("-")) {
+			str=str.replace("-", "");
 		}
 		
-		return dateStr;
+		return str;
 	}
 	
 	public static boolean tranCodeCheck(String tranCode) {
@@ -156,6 +154,19 @@ public abstract class Debug {
 		}
 		
 		return result;
+	}
+	
+	public static boolean getParamBoolean(HttpServletRequest request, String paramName) {
+		String b = request.getParameter(paramName);
+		boolean boo = false;
+		
+		if (b != null && b.equals("true")) {
+			boo = true;
+		}
+		
+		System.out.println(String.format("\t%s= %b", paramName, boo));
+		
+		return boo;
 	}
 	
 }

@@ -214,6 +214,99 @@ public class ProductDao extends AbstractDao {
 		return map;
 	}
 	
+public Map<String, Object> getProductListOrderByPrice(Search search, String tranCode, boolean orderByPrice) {
+		
+		Debug.startDaoMethod("getProductList", "search");
+		Debug.printDataT2("search", search);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		Connection con = DBUtil.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		String sql = "SELECT * "
+					+"FROM product "
+					+"WHERE pro_tran_code='"+tranCode+"' ";
+					
+		
+		String searchCondition = search.getSearchCondition();
+		Debug.printDataT2("searchCondition", searchCondition);
+		String searchKeyword = search.getSearchKeyword();
+		Debug.printDataT2("searchKeyword", searchKeyword);
+		String condition = "prod_no";
+		
+		if (!CommonUtil.null2str(searchKeyword).equals("")) {
+			
+			switch ((searchCondition==null)? "0" : searchCondition) {
+			case "0":	// 상품번호로 검색
+				sql += String.format("AND %s LIKE \'%%%s%%\' ", condition, searchKeyword);
+				break;
+				
+			case "1":	// 상품명으로 검색
+				condition = "prod_name";
+				sql += String.format("AND %s LIKE \'%%%s%%\' ", condition, searchKeyword);
+				break;
+				
+			case "2":	// 상품가격으로 검색
+				condition = "price";
+				sql += String.format("AND %s >= %s ", condition, searchKeyword);
+				break;
+				
+			}
+		}
+		
+		sql += "ORDER BY price "+((orderByPrice)? "" : "DESC ") + ", reg_date DESC NULLS LAST, prod_no ";
+		
+		int total = getTotalCount(sql);
+		Debug.printDataT2("total", total);
+		map.put("count", total);
+		
+		try {
+			sql = makeCurrentPageSql(sql, search);
+			Debug.printSQL(sql);
+			stmt = con.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			
+			List<Product> list = new ArrayList<Product>();
+			
+			while (rs.next()) {
+				Product product = new Product();
+				product.setProdNo(rs.getInt(1));
+				product.setProdName(rs.getString(2));
+				product.setProdDetail(rs.getString(3));
+				product.setManuDate(rs.getString(4));
+				product.setPrice(rs.getInt(5));
+				product.setFileName(rs.getString(6));
+				product.setRegDate(rs.getDate(7));
+				product.setProTranCode(rs.getString(8));
+				
+				list.add(product);
+			}
+			
+			map.put("list", list);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			
+			try {
+				if (rs != null) rs.close();
+				if (stmt != null) stmt.close();
+				if (con != null) con.close();
+				
+			} catch (Exception e2) {
+				e2.printStackTrace();
+				
+			}
+		}
+		
+		Debug.endDaoMethod();
+		
+		return map;
+	}
+	
 	
 	// 상품번호로 상품정보를 조회하는 DBMS
 	public Product findProduct(int prodNo) {

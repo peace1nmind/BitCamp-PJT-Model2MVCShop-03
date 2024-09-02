@@ -1,9 +1,14 @@
+<%@page import="com.model2.mvc.Debug"%>
 <%@page import="com.model2.mvc.service.domain.Product"%>
 <%@page import="com.model2.mvc.service.TranCodeMapper"%>
 <%@page import="java.util.Map"%>
 <%@page import="com.model2.mvc.service.product.impl.ProductServiceImpl"%>
 <%@page import="com.model2.mvc.service.product.ProductService"%>
 <%@ page contentType="text/html; charset=EUC-KR" %>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%	Debug.startJsp("history"); %>
 
 <%
 	Map<String, String> tranCodeMap = (TranCodeMapper.getInstance()).getMap();
@@ -44,6 +49,7 @@
 			}
 			
 			if (history != null) { %>
+					
 		<center>
 		<table border="1" cellspacing="0" cellpadding="5">
 		<tr>
@@ -56,6 +62,7 @@
 	<%			String[] historys = (history.trim()).split("&");
 				int no = 1;
 				for (String h : historys) {
+					if (no>5) break;
 					System.out.println("\th= "+ ((h==null||h.equals(""))? "null" : h));
 					if (!h.equals("null") && !h.equals("")) {
 						ProductService service = new ProductServiceImpl();
@@ -64,7 +71,6 @@
 	%>
 		<tr>
 			<td><%= no++ %></td>
-			<% if (no>6) break; %>
 			<td><a href="/getProduct.do?prodNo=<%= h %>&menu=search"	target="rightFrame"><%= product.getProdName() %></a></td>
 			<td><%= product.getPrice() %></td>
 			<td><%= tranCodeMap.get(product.getProTranCode().trim()) %></td>
@@ -79,7 +85,10 @@
 	
 		</table>
 		</center>
+	
 	<%	} %>
 	
 	</body>
 </html>
+
+<%	Debug.endJsp(); %>

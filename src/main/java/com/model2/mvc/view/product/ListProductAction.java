@@ -50,11 +50,21 @@ public class ListProductAction extends Action {
 		request.setAttribute("search", search);
 		
 		
-		/* 판매중인 상품들 */
+		/* 판매중인 상품들(listProduct) */
 		// 검색한 리스트값들을 다루는 로직
 		ProductService productService = new ProductServiceImpl();
 		
-		Map<String, Object> map = productService.getProductList(search, "1", false);
+		Map<String, Object> map;
+		
+		// 가격순 정렬을 눌렀다면?
+		if (request.getParameter("orderByPrice") != null) {
+			boolean orderByPrice = Debug.getParamBoolean(request, "orderByPrice");
+			map = productService.getProductListOrderByPrice(search, "1", orderByPrice);
+			request.setAttribute("orderByPrice", orderByPrice);
+		} else {
+			map = productService.getProductList(search, "1", false);
+		}
+		
 		request.setAttribute("map", map);
 		request.setAttribute("list", map.get("list"));
 		
@@ -68,7 +78,7 @@ public class ListProductAction extends Action {
 		request.setAttribute("tranCodeMap", tranCodeMap);
 		
 		
-		/* 구매완료 상품들 */
+		/* 구매완료 상품들(listSale) */
 		PurchaseService purchaseService = new PurchaseServiceImpl();
 		
 		Search saleSearch = new Search(getServletContext());
@@ -82,6 +92,7 @@ public class ListProductAction extends Action {
 		
 		request.setAttribute("saleMap", saleMap);
 		request.setAttribute("salePaging", salePaging);
+		
 		
 		Debug.endAction();
 		

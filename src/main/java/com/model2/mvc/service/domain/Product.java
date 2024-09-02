@@ -2,8 +2,10 @@ package com.model2.mvc.service.domain;
 // W D 
 
 import java.sql.Date;
+import java.util.Map;
 
 import com.model2.mvc.Debug;
+import com.model2.mvc.service.TranCodeMapper;
 
 public class Product {
 
@@ -25,7 +27,14 @@ public class Product {
 	}
 	
 	public void setProTranCode(String proTranCode) {
-		this.proTranCode = proTranCode.trim();
+		proTranCode = proTranCode.trim();
+		Map<String, String> tranCodeMap = TranCodeMapper.getInstance().getMap();
+		
+		if (!tranCodeMap.containsKey(proTranCode)) {
+			throw new IllegalArgumentException("올바르지 않은 tranCode\n1:판매중, 2:구매완료, 3:배송중, 4:배송완료, 5:최종 판매완료");
+		}
+		
+		this.proTranCode = proTranCode;
 	}
 	
 	public String getFileName() {

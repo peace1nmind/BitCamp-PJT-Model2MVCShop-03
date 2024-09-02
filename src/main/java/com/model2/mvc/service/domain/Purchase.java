@@ -123,7 +123,7 @@ public class Purchase {
 		Map<String, String> tranCodeMap = TranCodeMapper.getInstance().getMap();
 		
 		if (!tranCodeMap.containsKey(tranCode)) {
-			throw new IllegalArgumentException("올바르지 않은 tranCode\n1:판매중, 2:구매완료, 3:배송중, 4:배송완료");
+			throw new IllegalArgumentException("올바르지 않은 tranCode\n1:판매중, 2:구매완료, 3:배송중, 4:배송완료, 5:최종 판매완료");
 		}
 		
 		this.tranCode = tranCode;

@@ -59,5 +59,11 @@ public class ProductServiceImpl implements ProductService {
 		}
 	}
 
+	@Override
+	public Map<String, Object> getProductListOrderByPrice(Search search, String tranCode, boolean orderByPrice) {
+		
+		return productDao.getProductListOrderByPrice(search, tranCode, orderByPrice);
+	}
+
 }
 // class end

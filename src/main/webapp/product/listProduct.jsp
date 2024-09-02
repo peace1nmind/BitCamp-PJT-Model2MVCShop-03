@@ -85,6 +85,7 @@
 							
 							<input type="text" name="searchKeyword" value="${search.searchKeyword }" 
 									class="ct_input_g" style="width:200px; height:19px" />
+							
 						</td>
 						
 						<td align="right" width="70">
@@ -115,7 +116,11 @@
 						<td class="ct_line02"></td>
 						<td class="ct_list_b" width="150">상품명</td>
 						<td class="ct_line02"></td>
-						<td class="ct_list_b" width="150">가격</td>
+						<td class="ct_list_b" width="150">
+							가격&nbsp;
+							<input type="button" value="↑↓" 
+									onclick="window.location.href='/listProduct.do?page=1&menu=${menu }&searchCondition=${search.searchCondition }&searchKeyword=${search.searchKeyword }&orderByPrice=${(empty orderByPrice)? true : !orderByPrice}'">
+						</td>
 						<td class="ct_line02"></td>
 						<td class="ct_list_b">등록일</td>	
 						<td class="ct_line02"></td>
@@ -162,7 +167,8 @@
 							<a href="/listProduct.do?page=1
 													&menu=${menu }
 													&searchCondition=${search.searchCondition }
-													&searchKeyword=${search.searchCondition }" 
+													&searchKeyword=${search.searchKeyword }
+													&orderByPrice=${orderByPrice }" 
 							${(paging.left)? "":"class='disabled'" }>
 								<span>◀</span>
 							</a>
@@ -172,7 +178,8 @@
 							<a href="/listProduct.do?page=${paging.start - 1 }
 													&menu=${menu }
 													&searchCondition=${search.searchCondition }
-													&searchKeyword=${search.searchCondition }" 
+													&searchKeyword=${search.searchKeyword }
+													&orderByPrice=${orderByPrice }" 
 							${(paging.left)? "":"class='disabled'" }>
 								<span>이전</span>
 							</a>
@@ -183,7 +190,8 @@
 							<a href="/listProduct.do?page=${i }
 													&menu=${menu }
 													&searchCondition=${search.searchCondition }
-													&searchKeyword=${search.searchCondition }" 
+													&searchKeyword=${search.searchKeyword }
+													&orderByPrice=${orderByPrice }" 
 							${(paging.currentPage==i)? "style='font-weight: bold; font-size: 15px'" : "" }>
 								${i }
 							</a>
@@ -195,7 +203,8 @@
 							<a href="/listProduct.do?page=${paging.end + 1 }
 													&menu=${menu }
 													&searchCondition=${search.searchCondition }
-													&searchKeyword=${search.searchCondition }" 
+													&searchKeyword=${search.searchKeyword }
+													&orderByPrice=${orderByPrice }" 
 							${(paging.right)? "":"class='disabled'" }>
 								<span>다음</span>
 							</a>
@@ -205,7 +214,8 @@
 							<a href="/listProduct.do?page=${paging.totalPage }
 													&menu=${menu }
 													&searchCondition=${search.searchCondition }
-													&searchKeyword=${search.searchCondition }" 
+													&searchKeyword=${search.searchKeyword }
+													&orderByPrice=${orderByPrice }" 
 							${(paging.right)? "":"class='disabled'" }>
 								<span>▶</span>
 							</a>

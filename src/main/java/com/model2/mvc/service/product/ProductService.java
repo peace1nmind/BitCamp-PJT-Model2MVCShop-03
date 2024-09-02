@@ -25,6 +25,9 @@ public interface ProductService {
 	// 판매상품들 tranCode기준 이상, 이하 상품 리스트
 	public Map<String, Object> getProductList(Search search, String tranCode, boolean over);
 	
+	// 상품리스트 가격순 정렬
+	public Map<String, Object> getProductListOrderByPrice(Search search, String tranCode, boolean orderByPrice);
+	
 	// 상품정보 수정
 	public Product updateProduct(Product product);
 	

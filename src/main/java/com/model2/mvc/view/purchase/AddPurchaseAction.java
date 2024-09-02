@@ -1,6 +1,7 @@
 package com.model2.mvc.view.purchase;
 // W D 
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,8 +34,10 @@ public class AddPurchaseAction extends Action {
 		ProductService productService = new ProductServiceImpl();
 		PurchaseService purchaseService = new PurchaseServiceImpl();
 		
+		int prodNo = Debug.getParamInt(request, "prodNo");
+		
 		User user = userService.getUser(Debug.getParamStr(request, "buyerId"));
-		Product product = productService.getProduct(Debug.getParamInt(request, "prodNo"));
+		Product product = productService.getProduct(prodNo);
 		Purchase purchase = new Purchase(user, product);
 		
 		// tranNo = seq_transaction_tran_no.NEXTVAL
@@ -56,6 +59,29 @@ public class AddPurchaseAction extends Action {
 		request.setAttribute("purchase", purchase);
 		request.setAttribute("product", purchase.getPurchaseProd());
 		request.setAttribute("buyer", purchase.getBuyer());
+		
+		// 구매하면 최근 본 내역 쿠키에서 삭제
+		Cookie[] cookies = request.getCookies();
+		Cookie history = new Cookie("history", null);
+		
+		if (cookies != null && cookies.length > 0) {
+			
+			for (Cookie cookie : cookies) {
+				history = (cookie.getName().equals("history"))? cookie : history;
+			}
+			
+		}
+		
+		String value = history.getValue();
+		
+		System.out.println(value.contains(prodNo+""));
+		
+		if (value != null && value.contains(prodNo+"")) {
+			value = value.replace(prodNo+"", "");
+		}
+		
+		history.setValue(value);
+		response.addCookie(history);
 		
 		Debug.endAction();
 		

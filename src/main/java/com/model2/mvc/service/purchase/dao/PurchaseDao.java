@@ -484,8 +484,8 @@ public class PurchaseDao extends AbstractDao {
 		
 		String sql = "SELECT * " + 
 				"FROM transaction " + 
-				"WHERE tran_status_code = '2' " + 
-				"ORDER BY order_date DESC ";
+				"WHERE tran_status_code >= '2' " + 
+				"ORDER BY tran_status_code, order_date DESC ";
 		
 		try {
 			int total = getTotalCount(sql);
@@ -651,6 +651,5 @@ public class PurchaseDao extends AbstractDao {
 		
 	}
 	
-
 }
 // class end
