@@ -86,19 +86,11 @@ public class Purchase {
 
 	public void setReceiverPhone(String receiverPhone) {
 		
-		String phone = "";
-		
 		if (receiverPhone==null) {
 			receiverPhone = "";
 			
 		} else if (receiverPhone.contains("-")) {
-	
-			for (String p : receiverPhone.split("-")) {
-				phone += p;
-				
-			}
-			
-			receiverPhone = phone;
+			receiverPhone = receiverPhone.replace("-", "");
 			
 		}
 		
