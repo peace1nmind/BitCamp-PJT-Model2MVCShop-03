@@ -127,13 +127,13 @@
 					</c:forEach>
 					
 					
-					<c:if test="${paging.total == 0 }">
+					<c:if test="${salePaging.total == 0 }">
 						<tr class="ct_list_pop">
 							<table>
 								<tr>
 									<td></td>
 									<td align="center">
-										<h3>배송완료 이력이 없습니다.</h3>
+										<h3>배송할(구매완료 상태의) 상품이 없습니다.</h3>
 									</td>
 								</tr>
 							</table>

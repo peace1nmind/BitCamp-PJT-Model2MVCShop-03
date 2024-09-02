@@ -621,6 +621,7 @@ public class PurchaseDao extends AbstractDao {
 		
 		try {
 			Debug.printSQL(sql);
+			stmt = con.prepareStatement(sql);
 			stmt.setString(1, tranCode);
 			stmt.setInt(2, purchase.getTranNo());
 			

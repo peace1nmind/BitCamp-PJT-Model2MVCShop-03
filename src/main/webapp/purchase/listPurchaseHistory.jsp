@@ -19,7 +19,7 @@
 
 	<head>
 	
-		<title>구매목록 조회</title>
+		<title>배송완료목록 조회</title>
 	
 		<link rel="stylesheet" href="/css/admin.css" type="text/css">
 	
@@ -118,12 +118,14 @@
 							
 							<%-- 정보수정(구매확정) --%>
 							<td align="left">
-						
-								<a href="/updateTranCode.do?tranNo=${purchase.tranNo }
-															&tranCode=4
-															&page=${historyPaging.currentPage }">
-									구매확정
-								</a>
+							
+								<c:if test="${purchase.tranCode=='4' }">
+									<a href="/updateTranCode.do?tranNo=${purchase.tranNo }
+																&tranCode=4
+																&page=${historyPaging.currentPage }">
+										구매확정
+									</a>
+								</c:if>
 								
 							</td>
 						</tr>
@@ -131,7 +133,7 @@
 					</c:forEach>
 					
 					
-					<c:if test="${paging.total == 0 }">
+					<c:if test="${historyPaging.total == 0 }">
 						<tr class="ct_list_pop">
 							<table>
 								<tr>

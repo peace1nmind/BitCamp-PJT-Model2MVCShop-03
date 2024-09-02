@@ -23,7 +23,7 @@ public class UpdateTranCodeAction extends Action {
 		Debug.startAction("UpdateTranCodeAction");
 		
 		int tranNo = Debug.getParamInt(request, "tranNo");
-		int tranCode = Debug.getParamInt(request, "tranCoode");
+		int tranCode = Debug.getParamInt(request, "tranCode");
 		int currentPage = Debug.getPage(request, "page");
 		
 		ProductService productService = new ProductServiceImpl();

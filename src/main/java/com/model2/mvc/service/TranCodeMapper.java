@@ -36,6 +36,7 @@ public class TranCodeMapper {
 		map.put("2", "구매완료");
 		map.put("3", "배송중");
 		map.put("4", "배송완료");
+		map.put("5", "최종 판매완료");
 		
 		return map;
 	}
